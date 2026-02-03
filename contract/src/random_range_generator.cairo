@@ -1,9 +1,14 @@
+#[starknet::interface]
+trait IRandomRangeGenerator<TContractState> {
+    fn generate_random_in_range(ref self: TContractState, min: u128, max: u128) -> u128;
+    fn get_last_random_number(self: @TContractState) -> (u128, u128, u128);
+}
+
 #[starknet::contract]
 mod RandomRangeGenerator {
-    use cartridge_vrf::Source;
     use cartridge_vrf::vrf_consumer::vrf_consumer_component::VrfConsumerComponent;
-    use starknet::{ContractAddress, get_caller_address};
-    use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess, Map as LegacyMap};
+    use starknet::ContractAddress;
+    use starknet::storage::Map;
 
     component!(path: VrfConsumerComponent, storage: vrf_consumer, event: VrfConsumerEvent);
 
@@ -22,7 +27,7 @@ mod RandomRangeGenerator {
     struct Storage {
         #[substorage(v0)]
         vrf_consumer: VrfConsumerComponent::Storage,
-        last_result: LegacyMap<ContractAddress, RandomResult>,
+        last_result: Map<ContractAddress, RandomResult>,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -47,19 +52,15 @@ mod RandomRangeGenerator {
     }
 
     #[abi(embed_v0)]
-    impl RandomRangeGeneratorImpl of IRandomRangeGenerator<ContractState> {
+    impl RandomRangeGeneratorImpl of super::IRandomRangeGenerator<ContractState> {
         fn generate_random_in_range(ref self: ContractState, min: u128, max: u128) -> u128 {
-            panic!("Not implemented");
+            core::panic_with_felt252('Not implemented');
+            0
         }
 
         fn get_last_random_number(self: @ContractState) -> (u128, u128, u128) {
-            panic!("Not implemented");
+            core::panic_with_felt252('Not implemented');
+            (0, 0, 0)
         }
     }
-}
-
-#[starknet::interface]
-trait IRandomRangeGenerator<TContractState> {
-    fn generate_random_in_range(ref self: TContractState, min: u128, max: u128) -> u128;
-    fn get_last_random_number(self: @TContractState) -> (u128, u128, u128);
 }
