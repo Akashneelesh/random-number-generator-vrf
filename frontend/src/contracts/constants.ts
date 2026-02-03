@@ -19,7 +19,7 @@ export const RANDOM_RANGE_GENERATOR_ADDRESS = "0x0";
  * - Nonce: Non-deterministic randomness (different for each call)
  * - Salt: Deterministic randomness (same for same input)
  */
-export enum Source {
-  Nonce = "0x0",
-  Salt = "0x1"
-}
+export const Source = {
+  Nonce: "0x0",
+  Salt: "0x1"
+} as const;

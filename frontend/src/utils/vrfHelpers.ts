@@ -1,4 +1,5 @@
-import { Call, CallData } from "starknet";
+import type { Call } from "starknet";
+import { CallData } from "starknet";
 import { Source, VRF_PROVIDER_ADDRESS } from "../contracts/constants";
 
 /**

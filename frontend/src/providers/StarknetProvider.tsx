@@ -23,7 +23,6 @@ export default function StarknetProvider({
       chains={[sepolia]}
       provider={publicProvider()}
       connectors={connectors}
-      explorer={sepolia.explorers?.starknet || undefined}
     >
       {children}
     </StarknetConfig>
