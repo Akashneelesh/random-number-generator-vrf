@@ -6,8 +6,8 @@ import {
   jsonRpcProvider,
   voyager,
 } from "@starknet-react/core";
-import { ControllerConnector } from "@cartridge/connector";
-import type { SessionPolicies } from "@cartridge/controller";
+import { useState, useEffect } from "react";
+import type { Connector } from "@starknet-react/core";
 
 /**
  * StarknetProvider with Cartridge Controller for VRF support
@@ -23,7 +23,7 @@ const VRF_PROVIDER_ADDRESS = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c6142
 const RANDOM_RANGE_GENERATOR_ADDRESS = "0x0406600b709497815218ddb7c086138a3bb9fcc0be102750f2c5c29b10a33e4a";
 
 // VRF session policies
-const policies: SessionPolicies = {
+const policies = {
   contracts: {
     [VRF_PROVIDER_ADDRESS]: {
       methods: [{ name: "Request Random", entrypoint: "request_random" }],
@@ -33,15 +33,6 @@ const policies: SessionPolicies = {
     },
   },
 };
-
-// ⚠️ IMPORTANT: ControllerConnector must be created OUTSIDE of React components
-// Creating it inside a component will cause recreation on every render
-const connector = new ControllerConnector({
-  policies,
-  chains: [
-    { rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia" },
-  ],
-});
 
 // Configure RPC provider for Sepolia
 const provider = jsonRpcProvider({
@@ -55,13 +46,30 @@ export default function StarknetProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [connectors, setConnectors] = useState<Connector[]>([]);
+
+  // Load ControllerConnector only on client side to avoid WASM issues during SSR
+  useEffect(() => {
+    async function loadConnector() {
+      const { ControllerConnector } = await import("@cartridge/connector");
+      const connector = new ControllerConnector({
+        policies,
+        chains: [
+          { rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia" },
+        ],
+      });
+      setConnectors([connector as unknown as Connector]);
+    }
+    loadConnector();
+  }, []);
+
   return (
     <StarknetConfig
       autoConnect
       chains={[sepolia]}
       defaultChainId={sepolia.id}
       provider={provider}
-      connectors={[connector]}
+      connectors={connectors}
       explorer={voyager}
     >
       {children}
