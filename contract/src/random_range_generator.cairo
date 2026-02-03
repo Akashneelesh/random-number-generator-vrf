@@ -3,7 +3,7 @@ mod RandomRangeGenerator {
     use cartridge_vrf::Source;
     use cartridge_vrf::vrf_consumer::vrf_consumer_component::VrfConsumerComponent;
     use starknet::{ContractAddress, get_caller_address};
-    use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
+    use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess, Map as LegacyMap};
 
     component!(path: VrfConsumerComponent, storage: vrf_consumer, event: VrfConsumerEvent);
 
@@ -11,10 +11,26 @@ mod RandomRangeGenerator {
     impl VrfConsumerImpl = VrfConsumerComponent::VrfConsumerImpl<ContractState>;
     impl VrfConsumerInternalImpl = VrfConsumerComponent::InternalImpl<ContractState>;
 
+    #[derive(Drop, Serde, starknet::Store)]
+    struct RandomResult {
+        value: u128,
+        min: u128,
+        max: u128,
+    }
+
     #[storage]
     struct Storage {
         #[substorage(v0)]
         vrf_consumer: VrfConsumerComponent::Storage,
+        last_result: LegacyMap<ContractAddress, RandomResult>,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct RandomGenerated {
+        caller: ContractAddress,
+        value: u128,
+        min: u128,
+        max: u128,
     }
 
     #[event]
@@ -22,6 +38,7 @@ mod RandomRangeGenerator {
     enum Event {
         #[flat]
         VrfConsumerEvent: VrfConsumerComponent::Event,
+        RandomGenerated: RandomGenerated,
     }
 
     #[constructor]
