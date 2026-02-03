@@ -1,8 +1,10 @@
 #[starknet::interface]
 trait IRandomRangeGenerator<TContractState> {
     fn generate_random_in_range(ref self: TContractState, min: u128, max: u128) -> u128;
-    fn get_last_random_number(self: @TContractState) -> (u128, u128, u128);
+    fn get_last_random_number(self: @TContractState) -> (u128, u128, u128, ContractAddress);
 }
+
+use starknet::ContractAddress;
 
 #[starknet::contract]
 mod RandomRangeGenerator {
@@ -10,8 +12,7 @@ mod RandomRangeGenerator {
     use cartridge_vrf::Source;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
-    use starknet::storage::Map;
-    use starknet::storage::{StorageMapReadAccess, StorageMapWriteAccess};
+    use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
 
     component!(path: VrfConsumerComponent, storage: vrf_consumer, event: VrfConsumerEvent);
 
@@ -19,18 +20,15 @@ mod RandomRangeGenerator {
     impl VrfConsumerImpl = VrfConsumerComponent::VrfConsumerImpl<ContractState>;
     impl VrfConsumerInternalImpl = VrfConsumerComponent::InternalImpl<ContractState>;
 
-    #[derive(Drop, Serde, starknet::Store)]
-    struct RandomResult {
-        value: u128,
-        min: u128,
-        max: u128,
-    }
-
     #[storage]
     struct Storage {
         #[substorage(v0)]
         vrf_consumer: VrfConsumerComponent::Storage,
-        last_result: Map<ContractAddress, RandomResult>,
+        // Global last result - same for everyone
+        last_value: u128,
+        last_min: u128,
+        last_max: u128,
+        last_generator: ContractAddress,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -71,8 +69,11 @@ mod RandomRangeGenerator {
             let offset = random % range_size;
             let value: u128 = (min.into() + offset).try_into().unwrap();
 
-            // Store result for this caller
-            self.last_result.write(caller, RandomResult { value, min, max });
+            // Store result globally (visible to everyone)
+            self.last_value.write(value);
+            self.last_min.write(min);
+            self.last_max.write(max);
+            self.last_generator.write(caller);
 
             // Emit event
             self.emit(RandomGenerated { caller, value, min, max });
@@ -80,15 +81,15 @@ mod RandomRangeGenerator {
             value
         }
 
-        fn get_last_random_number(self: @ContractState) -> (u128, u128, u128) {
-            // Get caller address
-            let caller = get_caller_address();
+        fn get_last_random_number(self: @ContractState) -> (u128, u128, u128, ContractAddress) {
+            // Read global last result (same for all callers)
+            let value = self.last_value.read();
+            let min = self.last_min.read();
+            let max = self.last_max.read();
+            let generator = self.last_generator.read();
 
-            // Read stored result for this caller
-            let result = self.last_result.read(caller);
-
-            // Return tuple (value, min, max)
-            (result.value, result.min, result.max)
+            // Return tuple (value, min, max, generator)
+            (value, min, max, generator)
         }
     }
 }

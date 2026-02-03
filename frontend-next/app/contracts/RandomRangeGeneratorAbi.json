@@ -1,0 +1,169 @@
+[
+  {
+    "type": "impl",
+    "name": "RandomRangeGeneratorImpl",
+    "interface_name": "vrf_random_range::random_range_generator::IRandomRangeGenerator"
+  },
+  {
+    "type": "interface",
+    "name": "vrf_random_range::random_range_generator::IRandomRangeGenerator",
+    "items": [
+      {
+        "type": "function",
+        "name": "generate_random_in_range",
+        "inputs": [
+          {
+            "name": "min",
+            "type": "core::integer::u128"
+          },
+          {
+            "name": "max",
+            "type": "core::integer::u128"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u128"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "get_last_random_number",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "(core::integer::u128, core::integer::u128, core::integer::u128, core::starknet::contract_address::ContractAddress)"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "VrfConsumerImpl",
+    "interface_name": "cartridge_vrf::vrf_consumer::vrf_consumer_component::IVrfConsumer"
+  },
+  {
+    "type": "struct",
+    "name": "cartridge_vrf::types::PublicKey",
+    "members": [
+      {
+        "name": "x",
+        "type": "core::felt252"
+      },
+      {
+        "name": "y",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "cartridge_vrf::vrf_consumer::vrf_consumer_component::IVrfConsumer",
+    "items": [
+      {
+        "type": "function",
+        "name": "get_vrf_provider",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_vrf_provider_public_key",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "cartridge_vrf::types::PublicKey"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "constructor",
+    "name": "constructor",
+    "inputs": [
+      {
+        "name": "vrf_provider",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "cartridge_vrf::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "address",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "cartridge_vrf::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "VrfProviderChanged",
+        "type": "cartridge_vrf::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
+        "kind": "nested"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "vrf_random_range::random_range_generator::RandomRangeGenerator::RandomGenerated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "caller",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "value",
+        "type": "core::integer::u128",
+        "kind": "data"
+      },
+      {
+        "name": "min",
+        "type": "core::integer::u128",
+        "kind": "data"
+      },
+      {
+        "name": "max",
+        "type": "core::integer::u128",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "vrf_random_range::random_range_generator::RandomRangeGenerator::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "VrfConsumerEvent",
+        "type": "cartridge_vrf::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
+        "kind": "flat"
+      },
+      {
+        "name": "RandomGenerated",
+        "type": "vrf_random_range::random_range_generator::RandomRangeGenerator::RandomGenerated",
+        "kind": "nested"
+      }
+    ]
+  }
+]
