@@ -29,15 +29,15 @@ export default function WalletConnect() {
         <div className="flex items-center gap-4">
           <div className="text-right">
             {username && (
-              <p className="text-sm font-medium">{username}</p>
+              <p className="text-sm font-medium text-[#39FF14]">{username}</p>
             )}
-            <span className="font-mono text-xs text-gray-500">
+            <span className="font-mono text-xs text-gray-400">
               {truncateAddress(address)}
             </span>
           </div>
           <button
             onClick={() => disconnect()}
-            className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
+            className="neon-border-button px-4 py-2 rounded"
           >
             Disconnect
           </button>
@@ -50,9 +50,9 @@ export default function WalletConnect() {
     <button
       onClick={() => connect({ connector: controller })}
       disabled={isPending || !controller}
-      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+      className="neon-button px-6 py-2 rounded"
     >
-      {isPending ? "Connecting..." : "Connect Wallet"}
+      {isPending ? "CONNECTING..." : "CONNECT WALLET"}
     </button>
   );
 }

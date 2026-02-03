@@ -58,22 +58,16 @@ export default function RandomNumberForm({ onTransactionComplete }: RandomNumber
   }, [txHash, onTransactionComplete]);
 
   return (
-    <div style={{
-      border: "1px solid #e0e0e0",
-      borderRadius: "0.5rem",
-      padding: "1.5rem",
-      backgroundColor: "white",
-      boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-    }}>
-      <h2 style={{ marginTop: 0, marginBottom: "1rem", fontSize: "1.25rem" }}>
+    <div className="cyber-card p-6">
+      <h2 className="text-lg font-bold text-white uppercase tracking-wide mb-4">
         Generate Random Number
       </h2>
 
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "1rem" }}>
+        <div className="mb-4">
           <label
             htmlFor="min"
-            style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500 }}
+            className="block mb-2 text-sm font-medium text-gray-300 uppercase tracking-wide"
           >
             Minimum
           </label>
@@ -84,21 +78,14 @@ export default function RandomNumberForm({ onTransactionComplete }: RandomNumber
             value={min}
             onChange={(e) => setMin(Number(e.target.value))}
             disabled={loading}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              border: "1px solid #ccc",
-              borderRadius: "0.25rem",
-              fontSize: "1rem",
-              boxSizing: "border-box"
-            }}
+            className="cyber-input w-full px-4 py-3 rounded text-lg"
           />
         </div>
 
-        <div style={{ marginBottom: "1rem" }}>
+        <div className="mb-4">
           <label
             htmlFor="max"
-            style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500 }}
+            className="block mb-2 text-sm font-medium text-gray-300 uppercase tracking-wide"
           >
             Maximum
           </label>
@@ -109,36 +96,18 @@ export default function RandomNumberForm({ onTransactionComplete }: RandomNumber
             value={max}
             onChange={(e) => setMax(Number(e.target.value))}
             disabled={loading}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              border: "1px solid #ccc",
-              borderRadius: "0.25rem",
-              fontSize: "1rem",
-              boxSizing: "border-box"
-            }}
+            className="cyber-input w-full px-4 py-3 rounded text-lg"
           />
         </div>
 
         {localError && (
-          <div style={{
-            color: "#dc2626",
-            marginBottom: "1rem",
-            fontSize: "0.875rem"
-          }}>
+          <div className="text-red-500 mb-4 text-sm bg-red-500/10 border border-red-500/50 rounded p-3">
             {localError}
           </div>
         )}
 
         {error && (
-          <div style={{
-            color: "#dc2626",
-            marginBottom: "1rem",
-            fontSize: "0.875rem",
-            padding: "0.5rem",
-            backgroundColor: "#fee",
-            borderRadius: "0.25rem"
-          }}>
+          <div className="text-red-500 mb-4 text-sm bg-red-500/10 border border-red-500/50 rounded p-3">
             {error.message}
           </div>
         )}
@@ -146,58 +115,30 @@ export default function RandomNumberForm({ onTransactionComplete }: RandomNumber
         <button
           type="submit"
           disabled={isSubmitDisabled}
-          style={{
-            width: "100%",
-            padding: "0.75rem",
-            border: "none",
-            borderRadius: "0.25rem",
-            backgroundColor: isSubmitDisabled ? "#ccc" : "#646cff",
-            color: "white",
-            fontSize: "1rem",
-            fontWeight: 500,
-            cursor: isSubmitDisabled ? "not-allowed" : "pointer",
-            transition: "background-color 0.2s"
-          }}
+          className="neon-button w-full py-4 rounded text-lg"
         >
-          {loading ? "Generating..." : "Generate Random Number"}
+          {loading ? "⚡ GENERATING..." : "$ GENERATE RANDOM NUMBER"}
         </button>
 
         {!isConnected && (
-          <div style={{
-            marginTop: "0.75rem",
-            padding: "0.75rem",
-            fontSize: "0.875rem",
-            backgroundColor: "#f0f9ff",
-            borderRadius: "0.25rem",
-            textAlign: "center",
-            border: "1px solid #bfdbfe"
-          }}>
-            <strong>Connect Cartridge Controller wallet</strong> to generate random numbers.
-            <div style={{ marginTop: "0.25rem", fontSize: "0.75rem", color: "#666" }}>
+          <div className="mt-4 p-4 text-sm bg-black/50 border border-[#39FF14]/30 rounded text-center">
+            <span className="text-[#39FF14] font-semibold">Connect Cartridge Controller wallet</span>
+            <span className="text-gray-400"> to generate random numbers.</span>
+            <div className="mt-1 text-xs text-gray-500">
               VRF requires Cartridge Controller for paymaster integration
             </div>
           </div>
         )}
 
         {txHash && (
-          <div style={{
-            marginTop: "1rem",
-            padding: "0.75rem",
-            backgroundColor: "#f0f9ff",
-            borderRadius: "0.25rem",
-            fontSize: "0.875rem"
-          }}>
-            <strong>Transaction submitted:</strong>
+          <div className="mt-4 p-4 bg-[#39FF14]/10 border border-[#39FF14]/50 rounded text-sm">
+            <span className="text-[#39FF14] font-semibold">Transaction submitted:</span>
             <br />
             <a
               href={`https://sepolia.voyager.online/tx/${txHash}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                color: "#646cff",
-                textDecoration: "none",
-                wordBreak: "break-all"
-              }}
+              className="text-[#39FF14]/70 hover:text-[#39FF14] break-all"
             >
               {txHash}
             </a>

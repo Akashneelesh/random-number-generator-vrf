@@ -13,15 +13,16 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
+    <div className="min-h-screen bg-black">
+      {/* Header */}
+      <header className="border-b border-[#39FF14]/30">
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                VRF Random Range Generator
+              <h1 className="text-3xl font-bold text-white glow-text">
+                VRF RANDOM GENERATOR
               </h1>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-[#39FF14]">
                 Cryptographically secure random numbers on Starknet
               </p>
             </div>
@@ -30,37 +31,34 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <p className="text-gray-700">
-            This demo uses <strong>Cartridge VRF</strong> to generate verifiable random numbers
+        {/* Info Banner */}
+        <div className="cyber-card p-6 mb-8">
+          <p className="text-gray-300">
+            This demo uses <span className="text-[#39FF14] font-semibold">Cartridge VRF</span> to generate verifiable random numbers
             within your specified range. Each transaction generates a unique random number that
             is cryptographically secure and verifiable on-chain.
           </p>
-          <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
-            <strong>⚠️ Important:</strong> VRF requires <strong>Cartridge Controller</strong> wallet.
-            The Cartridge Paymaster wraps your transaction with VRF proof generation
-            (<code className="bg-yellow-100 px-1 py-0.5 rounded">submit_random</code> and{' '}
-            <code className="bg-yellow-100 px-1 py-0.5 rounded">assert_consumed</code>).
-            Standard wallets like Argent or Braavos will fail with &quot;VrfProvider: not fulfilled&quot; error.
-          </div>
         </div>
 
+        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ResultDisplay refreshTrigger={refreshTrigger} />
           <RandomNumberForm onTransactionComplete={handleTransactionComplete} />
         </div>
       </main>
 
-      <footer className="mt-12 bg-white border-t">
+      {/* Footer */}
+      <footer className="mt-12 border-t border-[#39FF14]/30">
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-600">
-            Built with Cartridge VRF on Starknet Sepolia testnet •
+          <p className="text-center text-sm text-gray-500">
+            Built with <span className="text-[#39FF14]">Cartridge VRF</span> on Starknet Sepolia testnet •
             <a
               href="https://github.com/cartridge-gg/cartridge_vrf"
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-2 text-blue-600 hover:text-blue-800"
+              className="ml-2 text-[#39FF14] hover:underline"
             >
               Documentation
             </a>

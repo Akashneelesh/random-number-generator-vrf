@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "VRF Random Range Generator",
+  title: "VRF Random Generator | Cyberpunk Edition",
   description: "Cryptographically secure random numbers using Cartridge VRF on Starknet",
 };
 
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased bg-black`}>
         <StarknetProvider>
           {children}
         </StarknetProvider>
