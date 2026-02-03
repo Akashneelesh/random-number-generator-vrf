@@ -10,3 +10,4 @@ cartridge_vrf = { path = "../../vrf" }
 
 [[target.starknet-contract]]
 sierra = true
+casm = true
