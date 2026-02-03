@@ -10,9 +10,9 @@ export const VRF_PROVIDER_ADDRESS = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549
 
 /**
  * RandomRangeGenerator contract address on Starknet Sepolia testnet
- * Placeholder: Will be updated after deployment in Phase 4
+ * Deployed in Phase 4 Plan 1
  */
-export const RANDOM_RANGE_GENERATOR_ADDRESS = "0x0";
+export const RANDOM_RANGE_GENERATOR_ADDRESS = "0x07ba8f7f7b1d7b2f7a3f9f998c373a71bc02f56c20cd2df4d2fe716076ffa8d9";
 
 /**
  * Source enum for VRF randomness
