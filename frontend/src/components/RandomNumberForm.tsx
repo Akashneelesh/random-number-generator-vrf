@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useAccount } from "@starknet-react/core";
 import { useVrfTransaction } from "../hooks/useVrfTransaction";
 
-export default function RandomNumberForm() {
+interface RandomNumberFormProps {
+  onTransactionComplete?: () => void;
+}
+
+export default function RandomNumberForm({ onTransactionComplete }: RandomNumberFormProps) {
   const { isConnected } = useAccount();
   const { executeVrfCall, txHash, loading, error } = useVrfTransaction();
 
@@ -35,6 +39,17 @@ export default function RandomNumberForm() {
   };
 
   const isSubmitDisabled = !isConnected || loading || min >= max;
+
+  // Trigger parent refresh when transaction hash changes (transaction completed)
+  useEffect(() => {
+    if (txHash && onTransactionComplete) {
+      // Wait a bit for transaction to be confirmed and indexed
+      const timer = setTimeout(() => {
+        onTransactionComplete();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [txHash, onTransactionComplete]);
 
   return (
     <div style={{
